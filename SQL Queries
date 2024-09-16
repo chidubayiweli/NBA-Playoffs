@@ -1,0 +1,32 @@
+-- NBA players that averaged higher points per game in the playoffs than the regular season
+
+SELECT r.Player, r.Team, r.PTS AS regular_season, p.PTS AS playoffs, ROUND((p.PTS - r.PTS),2) AS points_difference
+FROM `2024.Regular` r
+JOIN `2024.Playoffs` p
+ON r.Player = p.Player
+WHERE r.PTS >= 20
+AND p.PTS IS NOT NULL
+ORDER BY points_difference Desc
+
+-- NBA players that averaged higher assists per game in the playoffs than the regular season
+
+SELECT r.Player, r.Team, r.AST AS regular_season, p.AST AS playoffs, ROUND((p.AST - r.AST),2) AS assists_difference
+FROM `2024.Regular` r
+JOIN `2024.Playoffs` p
+ON r.Player = p.Player
+WHERE p.AST IS NOT NULL
+ORDER BY assists_difference Desc
+
+-- NBA players that averaged higher rebounds per game in the playoffs than the regular season
+
+SELECT *
+FROM (
+SELECT r.Player, r.Team, r.TRB AS regular_season, p.TRB AS playoffs, ROUND((p.TRB - r.TRB),2) AS rebounds_difference
+FROM `2024.Regular` r
+JOIN `2024.Playoffs` p
+ON r.Player = p.Player
+WHERE p.TRB IS NOT NULL
+ORDER BY r.TRB Desc
+)
+WHERE rebounds_difference > 0
+ORDER BY rebounds_difference DESC
